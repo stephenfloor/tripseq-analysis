@@ -7,7 +7,7 @@ Analysis tools for GE-seq data.  There are various individual tools inside to pe
 Calculate the properties of an input transcriptome (or regions thereof). Input format is BED, output files are .csv files with various properties as specified on the command line.
 
 ### usage
-
+```
 usage: transcriptome_properties.py [-h] -i INPUT -g GENOME [--gc] [--length]
                                    [--exonct] [--nt NT] [-o OUTPUT]
                                    [--window WINDOW]
@@ -63,7 +63,7 @@ CDS-specific arguments:
 3' UTR specific arguments:
   --mirna-sites         Compile miRNA binding site info from targetscan
   --au-elements         Count number of AU-rich elements in the 3' UTR
-
+```
 
 ###Requirements: 
 * ViennaRNA RNAfold and RNALfold (http://www.tbi.univie.ac.at/RNA)
