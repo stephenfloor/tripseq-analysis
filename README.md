@@ -6,7 +6,7 @@ Analysis tools for GE-seq data.  There are various individual tools inside to pe
 
 Calculate the properties of an input transcriptome (or regions thereof). Input format is BED, output files are .csv files with various properties as specified on the command line.
 
-### usage
+#### usage
 ```
 usage: transcriptome_properties.py [-h] -i INPUT -g GENOME [--gc] [--length]
                                    [--exonct] [--nt NT] [-o OUTPUT]
@@ -65,7 +65,7 @@ CDS-specific arguments:
   --au-elements         Count number of AU-rich elements in the 3' UTR
 ```
 
-###Requirements: 
+####Requirements: 
 * ViennaRNA RNAfold and RNALfold (http://www.tbi.univie.ac.at/RNA)
 * HumanCodonTable (this page)
 * AnnotationConverter (this page)
@@ -76,8 +76,9 @@ CDS-specific arguments:
 
 Take two lists of GEseq data (i.e. clusters) and compare them for genes that have the transcripts in each of the two different sets.  For each set of gene-linked transcript isoforms, compare input transcriptome features as calculated using transcriptome_properties.py 
 
-### Usage
+#### Usage
 
+```
 usage: compare_geseq_clusters.py [-h] --set1 FNAME ID ... [FNAME ID ... ...]
                                  --set2 FNAME ID ... [FNAME ID ... ...]
                                  --tx-to-gene TX_TO_GENE [-o OUTPUT] -n NREP
@@ -105,8 +106,8 @@ optional arguments:
                         a control.
   --txome-gtf TXOME_GTF
                         Path to transcriptome GTF
-
-### Requirements
+```
+#### Requirements
 
 * GTF.py (this page)
 * Transcript.py (this page)
@@ -119,8 +120,8 @@ optional arguments:
 
 Plot an individual transcript or all transcripts of a gene.  Requires input polysome sequencing data (i.e. GEseq) or some other distribution. 
 
-### Usage
-
+#### Usage
+```
 usage: plot_geseq_transcript.py [-h] -i INPUT [-o OUTPUT] -n NREP --id ID
                                 --tx-to-gene TX_TO_GENE [--text]
 
@@ -136,8 +137,8 @@ optional arguments:
   --tx-to-gene TX_TO_GENE
                         File containing transcript ID to gene name mapping
   --text                Output text data in addition to plots.
-
-### Requirements
+```
+#### Requirements
 
 * SNFUtils.py (this page) 
 * Input per-transcript distributions
@@ -148,8 +149,8 @@ optional arguments:
 Converts between FPKM and TPM (transcripts per million).  Uses the formula TPM_i = FPKM_i * 1e6 / sum(FPKM_g for all genes g)
 Citation: http://lynchlab.uchicago.edu/publications/Wagner,%20Kin,%20and%20Lynch%20%282012%29.pdf
 
-### Usage
-
+#### Usage
+```
 usage: fpkm_to_tpm.py [-h] -i INPUT [-t SEPARATOR] [-o [OUTPUT]]
                       [--ignore IGNORE] [--filter FILTER] [-u]
 
@@ -166,41 +167,33 @@ optional arguments:
                         first column)
   --filter FILTER       Filter genes with TPM below arg
   -u, --unique          Only output lines with unique entries in column 1
-
-### Requirements 
+```
+#### Requirements 
 * A file with FPKM values to convert to TPM 
 
 ## Utility classes
 
-### AnnotationConverter.py 
+#### AnnotationConverter.py 
 
 A class to provide for conversion between two annotation sets. 
 
-### GTF.py 
+#### GTF.py 
 
 A class to read GTF files - downloaded from https://gist.github.com/slowkow/8101481 and minimally modified 
 
-### SNFUtils.py
+#### SNFUtils.py
 
 A file providing various utility functions.
 
-### HumanCodonTable.py
+#### HumanCodonTable.py
 
 A class harboring information on human codon usage.
 
-### TargetscanScores.py
+#### TargetscanScores.py
 
 A class to read in targetscan scores and provide accessor functions. 
 
-### Transcript.py
+#### Transcript.py
 
 A class defining a transcript and structural features associated with it. 
-
-## compare_geseq_clusters.py 
-
-### Usage
-
-### Requirements
-
-## AnnotationConverter.py  GTF.py  HumanCodonTable.py   SNFUtils.py  TargetscanScores.py  Transcript.py  fpkm_to_tpm.py 
 
