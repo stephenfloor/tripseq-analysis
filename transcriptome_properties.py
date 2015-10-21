@@ -47,6 +47,9 @@ from collections import defaultdict
 # gets the folding energy of a sequence. returns a tuple containing energies (MFE, centroid, MEA) 
 # RNAfold courtesy viennaRNA 
 def get_energy(sequence): 
+    if len(sequence) < 1: 
+        return (0, 0, 0)
+
     lines = stdout_from_command("echo %s | RNAfold --noPS --MEA -p" % sequence)
 
     #first line is just the seq - skip 
@@ -70,6 +73,8 @@ def get_energy(sequence):
 # uses multiprocessing via the procpool to accelerate. - removed in favor of global threading
 #def get_sliding_energy(sequence, windowsize, procpool):
 def get_sliding_energy(sequence, windowsize):
+    if len(sequence) < 1: 
+        return (0, 0, 0)
     all75s = [sequence[i:i+windowsize] for i in range(len(sequence) - windowsize)]
     #nrg = procpool.map(get_energy, all75s)
     nrg = map(get_energy, all75s)
@@ -82,6 +87,9 @@ def get_sliding_energy(sequence, windowsize):
 
 # gets the folding energy (MFE) of a sequence using RNALfold
 def get_rnalfold_energy(sequence, windowsize): 
+    if len(sequence) < 1: 
+        return 0
+
     lines = stdout_from_command("echo %s | RNALfold -L %d" % (sequence, windowsize))
 
     # example output: .(((.(((..((((.....((((....((.......))....)))).)))).............))).))). ( -9.00)   44
@@ -287,23 +295,24 @@ def process_line(line):
 
     if (args.gc):
 
+        numN = sequence.count("N")
+
         if ("N" in sequence): 
-            print "Warning: stripping N nucleotides from transcript %s, sequence %s" % (transcriptID, sequence) 
+            #print "Warning: stripping N nucleotides from transcript %s" % (transcriptID) 
             sequence = sequence.strip("N") 
-            seqlen = len(sequence) 
+            #seqlen = len(sequence) 
 
         numG = sequence.count("G")
         numC = sequence.count("C")
         numA = sequence.count("A")
         numT = sequence.count("T")
 
-        if (numG + numC + numA + numT != seqlen):  # there must be an internal N; try to continue somewhat gracefully by adjusting the sequence length
-            numN = sequence.count("N")
-            seqlen -= numN
-            print "Warning: %d internal N nucleotides ignored when calculating GC content for transcript %s, sequence %s" % (numN, transcriptID, sequence) 
+        #if (numG + numC + numA + numT != seqlen):  # there must be an internal N; try to continue somewhat gracefully by adjusting the sequence length
+            #seqlen -= numN
+            #print "Warning: %d internal N nucleotides ignored when calculating GC content for transcript %s" % (numN, transcriptID) 
             #sys.exit("FATAL: sum of ACTG (%d) != length of sequence (%d) for sequence %s" % (numG+numC+numA+numT, seqlen, sequence))
             
-        percent_gc = (numG + numC) / float(seqlen)
+        percent_gc = (numG + numC) / float(seqlen - numN) if seqlen - numN > 0 else 0
 
         gc_outfile.write("%s,%3.2f\n" % (transcriptID, percent_gc))
 
