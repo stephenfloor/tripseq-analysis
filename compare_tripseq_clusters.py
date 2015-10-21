@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-# compare_geseq_clusters.py
+# compare_tripseq_clusters.py
 
 # Compare input lists of clusters against each other searching for genes that have transcripts in the different clusters.
 
-# Intended to be applied to fractionated polysome sequencing data (a la geseq) but theoretically can work for any data involving transcript-specific distributions
+# Intended to be applied to fractionated polysome sequencing data (a la tripseq) but theoretically can work for any data involving transcript-specific distributions
 
 # Input format can be either averaged or replicates listed side-by-side; units are arbitrary (counts, fpkm, vsd, rlog, etc)
 
@@ -44,7 +44,7 @@ parser.add_argument("--txome-gtf", help="Path to transcriptome GTF", required=Tr
 args = parser.parse_args()
 
 print "------------------------------------"
-print "|    compare_geseq_clusters.py     |"
+print "|    compare_tripseq_clusters.py   |"
 print "| extract differential transcripts |"
 print "|      run with -h for help        |"
 print "|           snf 1/2015             |"

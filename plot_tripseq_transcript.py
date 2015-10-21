@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-# plot_geseq_transcript.py 
+# plot_tripseq_transcript.py 
 
-# plot the indicated transcript or gene based input polysome sequencing (GEseq) data
+# plot the indicated transcript or gene based input polysome sequencing (TrIPseq) data
 
-# Intended to be applied to fractionated polysome sequencing data (a la geseq) but theoretically can work for any data involving transcript-specific distributions
+# Intended to be applied to fractionated polysome sequencing data (a la tripseq) but theoretically can work for any data involving transcript-specific distributions
 
 # Input format can be either averaged or replicates listed side-by-side; units are arbitrary (counts, fpkm, vsd, rlog, etc) 
 
@@ -33,7 +33,7 @@ parser.add_argument("--text", help="Output text data in addition to plots.", act
 args = parser.parse_args()
 
 print "----------------------------------------"
-print "|     plot_geseq_transcript.py          |"
+print "|     plot_tripseq_transcript.py        |"
 print "|   plot transcript distribution        |"
 print "|        run with -h for help           |"
 print "|             snf 2/2015                |"
