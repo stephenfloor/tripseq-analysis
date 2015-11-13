@@ -12,7 +12,7 @@
 
 import sys, os, argparse, csv, random
 import GTF
-from Transcript import * 
+from Transcript import *
 from SNFUtils import * # prompt, safe_open_file, stdout_from_command
 from collections import defaultdict, namedtuple
 from scipy.stats.stats import pearsonr, spearmanr, kurtosis
@@ -93,9 +93,9 @@ print "Dictionary created (%d entries)." % processed
 print "\nCreating transcript dictionary from %s (currently commented out)" % args.txome_gtf
 
 txDict = defaultdict(list)
-processed = 0 
+processed = 0
 
-# COMMENTED CODE builds a transcript dictionary to extract transcripts with specific differences (i.e. 5' utr changes, etc).  this takes a bit, so commented for now. 
+# COMMENTED CODE builds a transcript dictionary to extract transcripts with specific differences (i.e. 5' utr changes, etc).  this takes a bit, so commented for now.
 
 # the issue here is that lines for various transcripts may be interleaved, so can either create lots of objects, or a giant dict. opted for giant dict.
 # for line in GTF.lines(args.txome_gtf):
@@ -112,13 +112,13 @@ processed = 0
 # processed = 0
 
 # # now create a Transcript object for each transcript and output it
-    
+
 # for key in txDict:
-            
+
 #     tx = createGTFTranscript(txDict[key])
 
-#     txDict[key] = tx 
-#         #---------------- save to a new dict and/or overwrite old one here 
+#     txDict[key] = tx
+#         #---------------- save to a new dict and/or overwrite old one here
 
 #             #print tx
 #         #writeOutput(tx)
@@ -327,6 +327,8 @@ for fname,id in pairwise(args.set2):
 
 print "Read %d total transcripts for set2." % n_in_set2
 
+print "%d genes in set1, %d genes in set2" % (len(gene_to_txs_set1), len(gene_to_txs_set2))
+
 #print "---- gene_to_txs_set1 ----"
 #print gene_to_txs_set1
 #print tx_to_fit_set1
@@ -408,6 +410,8 @@ tx_list_set2 = defaultdict(list)
 comparisons, length_different = 0,0
 length_ratios = []
 
+genes_in_both_sets, txs_compared_in_set1, txs_compared_in_set2 = 0,0,0
+
 for gene in gene_to_txs_set1.iterkeys():
 
     # this data structure gene_to_txs is now for each gene (gene), a list (txs) of tuples of (dist, mean, stdev, clusterID) where each entry in the list is one transcript.
@@ -416,8 +420,10 @@ for gene in gene_to_txs_set1.iterkeys():
     # indices into the tuples are IDXDIST - distribution, IDXMEAN - means, IDXSTDEV - stdevs, IDXCLUSTID - cluster identifier
 
     if gene in gene_to_txs_set2:
+        genes_in_both_sets += 1
         # catalog properties for the two sets
         for val1 in gene_to_txs_set1[gene]:
+            txs_compared_in_set1 += 1
             tx_i = val1[IDXDIST][0]
             for propfile, propdict in txome_props.iteritems():
                 for k in range(len(propdict["header"])):
@@ -433,6 +439,7 @@ for gene in gene_to_txs_set1.iterkeys():
                     #    print "Warning: transcript %s not found for property %s" % (tx_i, propfile)
 
         for val2 in gene_to_txs_set2[gene]:
+            txs_compared_in_set2 += 1
             tx_j = val2[IDXDIST][0]
             for propfile, propdict in txome_props.iteritems():
                 for k in range(len(propdict["header"])):
@@ -442,7 +449,7 @@ for gene in gene_to_txs_set1.iterkeys():
                         prop_list_set2[propname].append(prop_j)
                         tx_list_set2[tx_j].append(str(prop_j))
                     else:
-                        tx_list_set2[tx_i].append(str(-1))
+                        tx_list_set2[tx_j].append(str(-1))
                     #else:
                     #    print "Warning: transcript %s not found for property %s" % (tx_j, propfile)
 
@@ -469,7 +476,8 @@ for gene in gene_to_txs_set1.iterkeys():
 #                         length_different += 1
 
 #print "Compared %d transcripts, %d have longer set2 length than set1 length (%3.2f %%)" % (comparisons, length_different, length_different/float(comparisons)*100)
-print "Compared %d transcripts" % (comparisons)
+print "Compared %d genes" % genes_in_both_sets
+print "Compared %d transcripts overall, %d from set1 and %d from set2" % (comparisons, txs_compared_in_set1, txs_compared_in_set2)
 
 # plot histogram of the length ratios
 # fig, ax = plt.subplots()
@@ -586,7 +594,7 @@ for propname in prop_list_set1.iterkeys():
     mw_test = mannwhitneyu(ivals, jvals)
 
     # calculate the KS statistics
-    ks_test = ks_2samp(ivals, jvals) 
+    ks_test = ks_2samp(ivals, jvals)
 
     # plot eCDFs
     fig, ax = plt.subplots()
