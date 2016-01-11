@@ -204,29 +204,9 @@ def process_file(fname, id, gene_to_txs, tx_to_fit):
                 means = [np.mean(i) for i in chunkwise(obs, args.nrep)]
                 stdevs = [np.std(i) for i in chunkwise(obs, args.nrep)]
 
-                # fit to a 3rd order polynomial for QC
-
-                #xvals = range(1,len(means)+1)
-                #popt, pcov, infodict, mesg, ier = curve_fit(poly3, xvals, means, p0=(1, 1, 1, 1),full_output=1)
-
-                #xnew = np.arange(1, max(xvals), 0.01)
-                #ynew = [poly3(i, popt[0], popt[1], popt[2], popt[3]) for i in xnew]
-
-
-            # analyze the quality of the fit
-                #perr = np.sqrt(np.diag(pcov))
-                #perr_percent = [ np.fabs(perr[i]/popt[i]) for i in range(len(popt))]
-                #avg_percent_error = np.mean(perr_percent)
-                #total_percent_error = sum(perr_percent)
-                #weighted_perr = sum([ perr_percent[i] * np.fabs(popt[i]) for i in range(len(popt))])
-                #prsn = pearsonr( [poly3(i, popt[0], popt[1], popt[2], popt[3]) for i in xvals], means)[0]
-                #sprmn = spearmanr( [poly3(i, popt[0], popt[1], popt[2], popt[3]) for i in xvals], means)[0]
-
                 # average percent error
 
                 mean_pe = np.mean([stdevs[i]/means[i] for i in range(nobs) if means[i] > 1e-6])
-
-                # Filtering: use the heuristics below to decide if this is a "well-behaved" distribution or not
 
                 # if more than half are zero; reject
                 if ( sum( [np.abs(i) < 0.01 for i in means] ) > nobs/2):
@@ -234,40 +214,6 @@ def process_file(fname, id, gene_to_txs, tx_to_fit):
                 #third_order_poly_fit_plot(range(1,nobs+1), means, txid + "_stdevreject.png", stdevs)
                     rejected_zero += 1
 
-
-            # attempt #1: average percent error of each point mean(stdev[i]/mean[i])
-            # rationale - large stdev relative to the mean indicates a poorly behaved transcript
-            # issues
-            #  - what value to filter at??  currently mean of 0.5 or 50% error on average
-            #  - sensitive to extreme values at the tails - downweight the first & last points?  currently not doing this
-
-
-                #elif (mean_pe > 0.9): # if the average error is > 90%, DQ.
-                #    print "Disqualifying %s: average stdev/mean ratio is %3.2f" % (txid, mean_pe)
-                #    print means,stdevs
-                #    print [stdevs[i]/means[i] for i in range(nobs) if means[i] > 1e-6]
-                #    third_order_poly_fit_plot(range(1,nobs+1), means, txid + "_stdevreject.png", stdevs)
-                #    rejected_pe += 1
-
-
-            # attempt #2: relationship between neighboring ranks
-            # rationale - ranked data should exhibit (ideally) only differences of one between ranks
-            # issues
-            #  - insensitive to the magnitude of changes that lead to changes in rank (can calculate this though..)
-            #  - how to filter?
-
-            # -- not implemented --
-
-            # attempt #3: fit to some curve
-            # rationale - can compare fitted curves instead of raw data
-            # issues
-            #  - what curve to fit to?  2nd/3rd order polynomial?
-            # empirically this does not work well, at least on top of the mean_pe filter above
-
-            #elif (prsn < 0.5 or sprmn < 0.5): # should defo DQ these rudeboys
-            #    print "Disqualifying %s: either (PearsonR, SpearmanR) to a third order polynomial fit is (%3.2f, %3.2f) < 0.5" % (txid, prsn, sprmn)
-            #    third_order_poly_fit_plot(range(1,nobs+1), means, txid + "_fitreject.png", stdevs)
-            #    rejected += 1
 
             # if this tx wasn't disqualified, add it to the mix
                 else:
