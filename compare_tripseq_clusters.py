@@ -36,6 +36,7 @@ parser.add_argument("-n", "--nrep", help="Number of replicates of each point", r
 parser.add_argument("--txome-props", help="List of files with transcriptome properties to correlate among (wildcards ok)", nargs="+", default=None)
 parser.add_argument("--control", help="Perform randomized comparisons of input transcripts as a control.", action="store_true")
 parser.add_argument("--txome-gtf", help="Path to transcriptome GTF", required=True)
+parser.add_argument("--strip-id", help="Strip anything following the final _ off the transcript ID in input", action="store_true") 
 
 # below not implemented yet
 #parser.add_argument("--seq", help="Output sequence of the region(s) different between transcripts", action="store_true")
@@ -342,7 +343,7 @@ txome_props = {}
 #    mydict = {rows[0]:rows[1] for rows in reader}
 
 def row_to_float(row):
-    return [float(i) if is_number(i) else i for i in row[1:]]
+    return [float(i.strip("\";")) if is_number(i.strip("\";")) else i.strip("\";") for i in row[1:]]
     #if is_number(row[1]):
     #    return np.array(row[1:], dtype=np.float32)
     #else:
@@ -360,7 +361,11 @@ if (args.txome_props):
             reader = csv.reader(infile)
             header = reader.next()
             prop_name = os.path.splitext(os.path.basename(file))[0]
-            txome_props[prop_name] = {"_".join(rows[0].split("_")[:-1]):row_to_float(rows)  for rows in reader}
+            if (args.strip_id): 
+                txome_props[prop_name] = {"_".join(rows[0].split("_")[:-1]).strip("\";"):row_to_float(rows)  for rows in reader}
+            else: 
+                txome_props[prop_name] = {rows[0].strip("\";"):row_to_float(rows)  for rows in reader}
+                
             #txome_props[prop_name] = {rows[0].split('_')[0]:row_to_float(rows)  for rows in reader}
             txome_props[prop_name]["header"] = header[1:]
             print "\tRead %d entries." % len(txome_props[prop_name].keys())
