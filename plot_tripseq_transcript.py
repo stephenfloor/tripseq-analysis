@@ -49,7 +49,7 @@ else:
 
 tx_to_gene = defaultdict(str)
 tx_to_name = defaultdict(str)
-tx_to_biotype = defaultdict(str)
+tx_to_txname = defaultdict(str)
 
 processed = 0
 
@@ -58,19 +58,19 @@ print "\nCreating tx_to_gene dictionary from %s..." % args.tx_to_gene
 with open(args.tx_to_gene, "r") as txfile:
     for line in txfile:
         line = line.split()
+        if (len(line) < 4): 
+            sys.exit("ERROR: line in tx_to_gene file has less than four entries: %s" % line)
+
         tx_to_gene[line[0]] = line[1]
-
-        if (len(line) > 2):
-            tx_to_name[line[0]] = line[2]
-
-        if (len(line) > 3):
-            tx_to_biotype[line[0]] = line[3]
+        tx_to_name[line[0]] = line[2]
+        tx_to_txname[line[0]] = line[3]
 
         processed += 1
 
 print "Dictionary created (%d entries)." % processed
 
-
+# this is used to define the order of the input columns in the output plots, to rearrange input to output.
+# janky but it works for these input files. 
 ORDER = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 3]
 
 ids = args.id.split(",") 
@@ -166,10 +166,10 @@ with open(fname, "r") as infile:
 
             if txid in tx_to_name:
                 #plotname = txid + " (" + tx_to_name[txid] + ")"
-                plotname = tx_to_name[txid] + " (" + txid + ")"
-                outfilename = tx_to_name[txid] + "-" + txid + ".pdf"
+                plotname = tx_to_txname[txid] + " (" + txid + ")"
+                outfilename = tx_to_txname[txid] + "_" + txid + ".pdf"
                 if (args.text):
-                    outdataname = tx_to_name[txid] + "-" + txid + ".txt" 
+                    outdataname = tx_to_txname[txid] + "_" + txid + ".txt" 
             else:
                 print "Warning: gene name for transcript %s not found" % txid
                 plotname = txid
