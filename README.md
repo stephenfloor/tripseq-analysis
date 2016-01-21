@@ -120,6 +120,8 @@ optional arguments:
 
 Plot an individual transcript or all transcripts of a gene.  Requires input polysome sequencing data (i.e. TrIPseq) or some other distribution. 
 
+Input "tx-to-gene" file should be a file containing four columns: txid, geneid, gene_name, tx_name. This can be downloaded from Ensembl Biomart or other sources.
+
 #### Usage
 ```
 usage: plot_tripseq_transcript.py [-h] -i INPUT [-o OUTPUT] -n NREP --id ID
