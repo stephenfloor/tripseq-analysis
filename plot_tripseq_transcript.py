@@ -29,6 +29,7 @@ parser.add_argument("-n", "--nrep", help="Number of replicates of each point", r
 parser.add_argument("--id", help="Transcript ID(s) to print (can be partial; can be comma-separated list)", required=True) 
 parser.add_argument("--tx-to-gene", help="File containing transcript ID to gene name mapping", required=True) 
 parser.add_argument("--text", help="Output text data in addition to plots.", action="store_true") 
+parser.add_argument("--format", help="Image format to export (png or pdf).", default="pdf")
 
 args = parser.parse_args()
 
@@ -167,13 +168,13 @@ with open(fname, "r") as infile:
             if txid in tx_to_name:
                 #plotname = txid + " (" + tx_to_name[txid] + ")"
                 plotname = tx_to_txname[txid] + " (" + txid + ")"
-                outfilename = tx_to_txname[txid] + "_" + txid + ".pdf"
+                outfilename = tx_to_txname[txid] + "_" + txid + "." + args.format
                 if (args.text):
                     outdataname = tx_to_txname[txid] + "_" + txid + ".txt" 
             else:
                 print "Warning: gene name for transcript %s not found" % txid
                 plotname = txid
-                outfilename = plotname + ".pdf"
+                outfilename = plotname + "." + args.format
                 if (args.text):
                     outdataname = plotname + ".txt" 
 

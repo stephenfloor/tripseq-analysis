@@ -125,7 +125,10 @@ Input "tx-to-gene" file should be a file containing four columns: txid, geneid, 
 #### Usage
 ```
 usage: plot_tripseq_transcript.py [-h] -i INPUT [-o OUTPUT] -n NREP --id ID
-                                --tx-to-gene TX_TO_GENE [--text]
+                                  --tx-to-gene TX_TO_GENE [--text]
+                                  [--format FORMAT]
+
+Plot input transcript ID from input distribution file
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -139,6 +142,7 @@ optional arguments:
   --tx-to-gene TX_TO_GENE
                         File containing transcript ID to gene name mapping
   --text                Output text data in addition to plots.
+  --format FORMAT       Image format to export (png or pdf).
 ```
 #### Requirements
 
