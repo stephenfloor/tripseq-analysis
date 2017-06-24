@@ -37,6 +37,7 @@ parser.add_argument("--txome-props", help="List of files with transcriptome prop
 parser.add_argument("--control", help="Perform randomized comparisons of input transcripts as a control.", action="store_true")
 parser.add_argument("--txome-gtf", help="Path to transcriptome GTF", required=True)
 parser.add_argument("--strip-id", help="Strip anything following the final _ off the transcript ID in input", action="store_true") 
+parser.add_argument("--log", help="Plot eCDF on log scale (x-axis)", action="store_true") 
 
 # below not implemented yet
 #parser.add_argument("--seq", help="Output sequence of the region(s) different between transcripts", action="store_true")
@@ -553,6 +554,9 @@ for propname in prop_list_set1.iterkeys():
     i_sorted=np.sort( ivals )
     i_yvals=np.arange(len(i_sorted))/float(len(i_sorted))
     plt.plot( i_sorted, i_yvals )
+
+    if args.log: 
+        ax.set_xscale("log") 
 
     j_sorted=np.sort( jvals )
     j_yvals=np.arange(len(j_sorted))/float(len(j_sorted))
