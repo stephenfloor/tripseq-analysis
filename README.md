@@ -1,5 +1,5 @@
 # tripseq-analysis
-Analysis tools for TrIP-seq data.  There are various individual tools inside to perform different tasks.  Limited documentation below, contact floor@berkeley.edu with questions. 
+Analysis tools for TrIP-seq data.  There are various individual tools inside to perform different tasks.  Limited documentation below, contact stephen.floor@ucsf.edu with questions. 
 
 
 ## transcriptome_properties.py 
